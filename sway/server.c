@@ -235,18 +235,27 @@ static void handle_renderer_lost(struct wl_listener *listener, void *data) {
 bool server_init(struct sway_server *server) {
 	sway_log(SWAY_DEBUG, "Initializing Wayland server");
 	server->wl_display = wl_display_create();
+	sway_log(SWAY_DEBUG, "2tfn: WL created");
 	server->wl_event_loop = wl_display_get_event_loop(server->wl_display);
+	sway_log(SWAY_DEBUG, "2tfn: Display Event loop done");
 
+	sway_log(SWAY_DEBUG, "2tfn: Setting global filter");
 	wl_display_set_global_filter(server->wl_display, filter_global, NULL);
+	sway_log(SWAY_DEBUG, "2tfn: Setting max buffer size");
 	wl_display_set_default_max_buffer_size(server->wl_display, 1024 * 1024);
 
+	sway_log(SWAY_DEBUG, "2tfn: Creating WL backend");
 	root = root_create(server->wl_display);
 
+
+	sway_log(SWAY_DEBUG, "2tfn: Autocreating backend");
+	printf("2tfn: Autocreating start\n");
 	server->backend = wlr_backend_autocreate(server->wl_event_loop, &server->session);
 	if (!server->backend) {
 		sway_log(SWAY_ERROR, "Unable to create backend");
 		return false;
 	}
+	sway_log(SWAY_DEBUG, "2tfn: Autocreating backend done /");
 
 	wlr_multi_for_each_backend(server->backend, detect_proprietary, NULL);
 
